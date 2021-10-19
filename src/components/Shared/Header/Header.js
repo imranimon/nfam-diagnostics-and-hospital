@@ -1,11 +1,22 @@
 import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import './Header.css'
 import { HashLink } from 'react-router-hash-link';
 import logo from '../../../images/NFam-logo.png'
 import { Link } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
+    const { user, logOut, setIsLoading } = useAuth()
+    const history = useHistory()
+    const handleSignOut = () => {
+        logOut()
+            .then(() => {
+                history.push('/')
+            })
+            .finally(() => setIsLoading(false))
+    }
     return (
         <div>
             <Navbar sticky="top" bg="dark" variant="dark" collapseOnSelect expand="lg">
@@ -22,12 +33,19 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav" className='ms-5'>
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to="#features">Features</Nav.Link>
-                            <Nav.Link as={Link} to="#pricing">Pricing</Nav.Link>
+                            <Nav.Link as={Link} to="/appointment">Make Appointment</Nav.Link>
+                            <Nav.Link as={Link} to="/about">About US</Nav.Link>
                         </Nav>
                         <Nav>
-                            <Nav.Link as={Link} to="#deets">More deets</Nav.Link>
-                            <Nav.Link as={Link} to="#memes">Dank memes</Nav.Link>
+                            {user.email ?
+                                <Button onClick={handleSignOut} variant='light'>Logout</Button> :
+                                <Nav.Link as={Link} to="/signin">Sign-In</Nav.Link>
+                            }
+                            {user.displayName &&
+                                <Navbar.Text className='ms-2'>
+                                    Signed in as: <a href="#">{user.displayName}</a>
+                                </Navbar.Text>
+                            }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

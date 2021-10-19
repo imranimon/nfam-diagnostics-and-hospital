@@ -1,0 +1,44 @@
+[
+    {
+      "id": 1,
+      "name": "CT SCAN",
+      "description": "A CT scan or computed tomography scan is a medical imaging technique used in radiology to get detailed images of the body noninvasively for diagnostic purposes. The personnel that perform CT scans are called radiographers or radiology technologists.",
+      "price": 150,
+      "img": "https://i.ibb.co/RYTcn18/card-Ct-Scan.jpg"
+    },
+    {
+      "id": 2,
+      "name": "MRI",
+      "description": "Magnetic resonance imaging is a medical imaging technique used in radiology to form pictures of the anatomy and the physiological processes of the body. MRI scanners use strong magnetic fields, magnetic field gradients, and radio waves to generate images of the organs in the body.",
+      "price": 160,
+      "img": "https://i.ibb.co/tYV5Bzv/card-mri.png"
+    },
+    {
+      "id": 3,
+      "name": "X-RAY",
+      "description": "An X-ray, or, much less commonly, X-radiation, is a penetrating form of high-energy electromagnetic radiation. Most X-rays have a wavelength ranging from 10 picometers to 10 nanometers, corresponding to frequencies in the range 30 petahertz to 30 exahertz and energies in the range 124 eV to 124 keV. ",
+      "price": 100,
+      "img": "https://i.ibb.co/rmvzpqJ/card-x-ray.jpg"
+    },
+    {
+      "id": 4,
+      "name": "ECG",
+      "description": "Electrocardiography is the process of producing an electrocardiogram. It is a graph of voltage versus time of the electrical activity of the heart using electrodes placed on the skin.",
+      "price": 80,
+      "img": "https://i.ibb.co/6y8Kd4V/card-ecg.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Ultrasonogram",
+      "description": "Medical ultrasound includes diagnostic imaging techniques, as well as therapeutic applications of ultrasound. In diagnosis, it is used to create an image of internal body structures such as tendons, muscles, joints, blood vessels, and internal organs.",
+      "price": 105,
+      "img": "https://i.ibb.co/2vyTmVH/card-ultrasonogram.jpg"
+    },
+    {
+      "id": 6,
+      "name": "CBC",
+      "description": "A complete blood count, also known as a full blood count, is a set of medical laboratory tests that provide information about the cells in a persons blood. The CBC indicates the counts of white blood cells, red blood cells and platelets, the concentration of hemoglobin, and the hematocrit. ",
+      "price": 180,
+      "img": "https://i.ibb.co/G9qNc4B/card-cbc.jpg"
+    }
+  ]
