@@ -1,0 +1,9 @@
+.bg-404{
+    background-color: #f4f4f4;
+}
+
+.btn-position{
+    position: absolute;
+    top: 18%;
+    left: 45%
+}
