@@ -1,16 +1,22 @@
 import { Button } from 'bootstrap';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { useHistory, useLocation } from 'react-router';
+import { useForm } from "react-hook-form";
 
 const SignUp = () => {
-
-    const { signInUsingGoogle, setIsLoading } = useAuth()
     const prevLocation = useLocation();
     const redirect_url = prevLocation.state?.from || '/';
     const history = useHistory()
+    const { signInUsingGoogle, setIsLoading, logOut,
+        createNewUser, setUserName, setError, error } = useAuth()
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    useEffect(() => {
+        setError('')
+    }, [])
+
     const handleSignIn = () => {
         signInUsingGoogle()
             .then(result => {
@@ -18,6 +24,29 @@ const SignUp = () => {
 
             })
             .finally(() => setIsLoading(false))
+    }
+    const onCreateNewUser = (data) => {
+        createNewUser(data.email, data.password)
+            .then((result) => {
+                setUserName(data.name)
+                    .then((res) => {
+                        // Name Updated
+                    }).catch((error) => {
+                        setError(error.message);
+                    });
+                logOut()
+                    .then(() => {
+                        history.push('/signin')
+                    })
+                    .catch((error) => {
+                        setError(error.message);
+                    })
+                    .finally(() => setIsLoading(false))
+                reset();
+            })
+            .catch((error) => {
+                setError(error.message);
+            });
     }
     return (
         <div className='container mt-1'>
@@ -28,35 +57,43 @@ const SignUp = () => {
             </Row>
             <Row className='shadow-lg p-3 mb-5 bg-body rounded'>
                 <Col xs={12} md={6}>
-                    <img style={{maxHeight:'500px'}} className='img-fluid' src="https://i.ibb.co/Np2v9pn/person-using-tablet.jpg" alt="" />
+                    <img style={{ maxHeight: '500px' }} className='img-fluid' src="https://i.ibb.co/Np2v9pn/person-using-tablet.jpg" alt="" />
                 </Col>
                 <Col xs={12} md={6}>
                     <div className='mb-2'>
-                        <form action="">
+                        <form onSubmit={handleSubmit(onCreateNewUser)}>
+                            {error !== '' && <span className='text-danger'>{error}</span>}
                             <div className="mb-3">
                                 <label htmlFor="name" className="form-label">Your Name</label>
-                                <input type="text" className="form-control" id="name" />
+                                <input  {...register("name", { required: true })}
+                                    type="text" className="form-control" id="name" />
+                                {errors.name && <span className='text-danger'>Name is required</span>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">Email address</label>
-                                <input type="email" className="form-control" id="email" />
+                                <input {...register("email", { required: true })}
+                                    type="email" className="form-control" id="email" />
+                                {errors.email && <span className='text-danger'>Email is required</span>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Password</label>
-                                <input type="password" className="form-control" id="password" />
+                                <input {...register("password", { required: true })}
+                                    type="password" className="form-control" id="password" />
+                                {errors.password && <span className='text-danger'>Password is required</span>}
+                            </div>
+                            <div className="mb-3">
+                                <input className='btn btn-outline-success' type="submit" />
                             </div>
                         </form>
-                        <button className='btn btn-outline-success'>Submit</button>
-                        <span className='ms-2'>
-                            Already Signed-Up?
-                            <Link className='ms-1' to='/signin'>Sign-In</Link>
-                        </span>
                     </div>
-                    <div>
+                    <div className='d-inline'>
                         <button onClick={handleSignIn} className='btn btn-outline-success'>
-                            <i className="fab fa-google me-1"></i>Sign In using Google</button>
+                            <i className="fab fa-google me-1"></i>Sign-In Using Google</button>
                     </div>
-
+                    <span className='ms-2'>
+                        Already Signed-Up?
+                        <Link className='ms-1' to='/signin'>Sign-In</Link>
+                    </span>
                 </Col>
             </Row>
 

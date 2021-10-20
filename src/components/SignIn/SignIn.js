@@ -1,19 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import { useForm } from "react-hook-form";
 
 const SignIn = () => {
-    const { signInUsingGoogle, setIsLoading } = useAuth()
+    const { signInUsingGoogle, setIsLoading,
+        setError, error, manualSignIn } = useAuth()
     const prevLocation = useLocation();
     const redirect_url = prevLocation.state?.from || '/';
     const history = useHistory()
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+    useEffect(() => {
+        setError('')
+    }, [])
+
     const handleSignIn = () => {
         signInUsingGoogle()
             .then(result => {
                 history.push(redirect_url)
 
+            })
+            .finally(() => setIsLoading(false))
+    }
+
+    const onManualSignIn = (data) => {
+        manualSignIn(data.email, data.password)
+            .then(result => {
+                history.push(redirect_url)
+                reset();
+            })
+            .catch((error) => {
+                setError(error.message);
             })
             .finally(() => setIsLoading(false))
     }
@@ -26,32 +46,39 @@ const SignIn = () => {
             </Row>
             <Row className='shadow-lg p-3 mb-5 bg-body rounded'>
                 <Col xs={12} md={6}>
-                    <img style={{maxHeight:'500px'}}  className='img-fluid' src="https://i.ibb.co/QH968VC/3094352.jpg" alt="" />
+                    <img style={{ maxHeight: '500px' }} className='img-fluid' src="https://i.ibb.co/QH968VC/3094352.jpg" alt="" />
                 </Col>
                 <Col xs={12} md={6}>
                     <div className='mb-2'>
-                        <form action="">
+                        <form onSubmit={handleSubmit(onManualSignIn)}>
+                            {error !== '' && <span className='text-danger'>{error}</span>}
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">Email address</label>
-                                <input type="email" className="form-control" id="email" />
+                                <input {...register("email", { required: true })}
+                                    type="email" className="form-control" id="email" />
+                                {errors.email && <span className='text-danger'>Email is required</span>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Password</label>
-                                <input type="password" className="form-control" id="password" />
+                                <input {...register("password", { required: true })}
+                                    type="password" className="form-control" id="password" />
+                                {errors.password && <span className='text-danger'>Password is required</span>}
+                            </div>
+                            <div className="mb-3">
+                                <input className='btn btn-outline-success' type="submit" />
                             </div>
                         </form>
-                        <button className='btn btn-outline-success'>Submit</button>
-                        <span className='ms-2'>
-                            New To NFam?
-                            <Link className='ms-1' to='/signup'>Sign-Up</Link>  
-                        </span>
                     </div>
 
-                    <div>
+                    <div className='d-inline'>
                         <Button onClick={handleSignIn} variant='outline-success'>
-                        <i className="fab fa-google me-1"></i>Sign In using Google
+                            <i className="fab fa-google me-1"></i>Sign-In Using Google
                         </Button>
                     </div>
+                    <span className='ms-2'>
+                        New To NFam?
+                        <Link className='ms-1' to='/signup'>Sign-Up</Link>
+                    </span>
                 </Col>
             </Row>
 
